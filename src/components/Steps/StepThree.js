@@ -1,13 +1,25 @@
 import React, { Component } from "react";
 import axios from "axios";
+import store, { STEP_THREE } from "../../store";
 
 class StepThree extends Component {
   constructor() {
     super();
+    const reduxState = store.getState();
     this.state = {
-      mortgage: "",
-      rent: "",
+      mortgage: reduxState.mortgage,
+      rent: reduxState.rent,
     };
+  }
+
+  componentDidMount() {
+    store.subscribe(() => {
+      const reduxState = store.getState();
+      this.setState({
+        mortgage: reduxState.mortgage,
+        rent: reduxState.rent,
+      });
+    });
   }
 
   handleInput(e) {

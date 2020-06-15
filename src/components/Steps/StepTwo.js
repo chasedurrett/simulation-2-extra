@@ -1,12 +1,23 @@
 import React, { Component } from "react";
 import {Link} from 'react-router-dom'
+import store, { STEP_TWO } from "../../store";
 
 class StepTwo extends Component {
   constructor() {
+    const reduxState = store.getState()
     super();
     this.state = {
-      img: "",
+      img: reduxState.img,
     };
+  }
+
+  componentDidMount(){
+    store.subscribe(() => {
+      const reduxState = store.getState()
+      this.setState({
+        img: reduxState.img
+      })
+    })
   }
 
   handleInput(e) {
@@ -16,6 +27,8 @@ class StepTwo extends Component {
   }
 
   render() {
+    const reduxState = store.getState();
+    console.log(reduxState);
     return (
       <div>
         <div>

@@ -1,21 +1,46 @@
 import React, { Component } from "react";
-import {Link} from 'react-router-dom'
+import { Link } from "react-router-dom";
+import store, { STEP_ONE } from "../../store";
 
 class StepOne extends Component {
   constructor() {
     super();
+    const reduxState = store.getState();
     this.state = {
-      name: "",
-      address: "",
-      city: "",
-      state: "",
-      zip: "",
+      name: reduxState.name,
+      address: reduxState.address,
+      city: reduxState.city,
+      state: reduxState.state,
+      zip: reduxState.zip,
     };
+  }
+
+  componentDidMount() {
+    store.subscribe(() => {
+      const reduxState = store.getState();
+      this.setState({
+        name: reduxState.name,
+        address: reduxState.address,
+        city: reduxState.city,
+        state: reduxState.state,
+        zip: reduxState.zip,
+      });
+    });
+    const reduxState = store.getState();
+    console.log(reduxState);
   }
 
   handleInput(e) {
     this.setState({
       [e.target.name]: e.target.value,
+    });
+  }
+
+  stepOneUpdate() {
+    const { name, address, city, state, zip } = this.state;
+    store.dispatch({
+      type: STEP_ONE,
+      payload: this.state
     });
   }
 
@@ -41,7 +66,9 @@ class StepOne extends Component {
             name="zip"
             onChange={(e) => this.handleInput(e)}
           />
-          <Link to="/wizard/step2">Next Step</Link>
+          <Link onClick={() => this.stepOneUpdate} to="/wizard/step2">
+            Next Step
+          </Link>
         </div>
       </div>
     );
